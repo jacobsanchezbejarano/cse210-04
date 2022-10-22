@@ -19,9 +19,9 @@ class Artifact(Actor):
             artifact (Artifact): An instance of a child class of actor.
         """
         earn = 0
-        if artifact == "*":
+        if artifact == "o\no\no\no":
             earn = 1
-        elif artifact == "o":
+        else:
             earn = -1
         
         self._earnings = earn 

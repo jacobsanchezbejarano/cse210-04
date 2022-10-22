@@ -2,6 +2,7 @@ import random
 from game.shared.color import Color
 from game.shared.point import Point
 from game.casting.artifact import Artifact
+CAR = "[]----[]\n  OO\n  OO\n[]----[]"
 
 class Director:
     """A person who directs the game. 
@@ -76,48 +77,84 @@ class Director:
         robot.move_next(max_x, max_y)
         
         for artifact in artifacts:
-            
+
             artifact.countdown()
-            if robot.get_position().equals(artifact.get_position()):
+            
+            for i in robot.get_body_range():
                 
-                artifact.calculate_earnings(artifact.get_text())
-                earnings = artifact.get_earnings()
+                x_a = artifact.get_body_range()[2].get_x()
+                y_a = artifact.get_body_range()[3].get_y()
+                x_r = i.get_x()
+                y_r = i.get_y()+4
 
-                self.set_score(earnings)
+                x_robot_range = []
+                x_artifact_range = []
+                y_robot_range = []
+                y_artifact_range = []
 
-                cast.remove_actor('artifacts',artifact) 
-                gems = "*"
-                rocks = "o"
+                condition = False
 
-                list_artifacts = [gems, rocks]
-
-
+                for x in range(0,32):
+                    x_artifact_range.append(x_a-16+x) 
+                for x in range(0,32):
+                    x_robot_range.append(x_r-11+x) 
+                for x in range(0,5):
+                    y_artifact_range.append(y_a-5+x)
+                for x in range(0,5):
+                    y_robot_range.append(y_a-x)
                 
-                text = list_artifacts[random.randint(0, 1)]
+                for z in x_artifact_range:
 
-                x = random.randint(1, self.COLS - 1)
-                y = random.randint(1, self.ROWS - 20)
-                position = Point(x, y)
-                position = position.scale(self.CELL_SIZE)
-
-                r = random.randint(0, 255)
-                g = random.randint(0, 255)
-                b = random.randint(0, 255)
-                color = Color(r, g, b)
+                        if z in x_robot_range and (440 in y_artifact_range or 460 in y_artifact_range or 480 in y_artifact_range or 500 in y_artifact_range):
+                            condition = True
+                            
+                            
+                if condition:
+                    
+                    
                 
-                artifact = Artifact()
-                artifact.set_text(text)
-                artifact.set_font_size(self.FONT_SIZE)
-                artifact.set_color(color)
-                artifact.set_position(position)
-                cast.add_actor("artifacts", artifact)
+                    artifact.calculate_earnings(artifact.get_text())
+                    earnings = artifact.get_earnings()
+
+                    self.set_score(earnings)
+
+                    cast.remove_actor('artifacts',artifact) 
+
+                    gems = CAR
+                    rocks = "o\no\no\no"
+
+                    list_artifacts = [gems, rocks]
+
+
+                    
+                    text = list_artifacts[random.randint(0, 1)]
+
+                    reduced_cols = (self.COLS - 1) / 8
+                    reduced_rows = (self.ROWS - 30) / 8
+
+                    x = random.randint(1, int(reduced_cols))*8
+                    y = random.randint(1, int(reduced_rows))*8
+                    position = Point(x, y)
+                    position = position.scale(self.CELL_SIZE)
+
+                    r = random.randint(0, 255)
+                    g = random.randint(0, 255)
+                    b = random.randint(0, 255)
+                    color = Color(r, g, b)
+                    
+                    artifact = Artifact()
+                    artifact.set_text(text)
+                    artifact.set_font_size(self.FONT_SIZE)
+                    artifact.set_color(color)
+                    artifact.set_position(position)
+                    cast.add_actor("artifacts", artifact)
             
             y_pos = artifact._position.get_y()
             
             if y_pos > 588:
                     cast.remove_actor('artifacts',artifact) 
-                    gems = "*"
-                    rocks = "o"
+                    gems = CAR
+                    rocks = "o\no\no\no"
 
                     list_artifacts = [gems, rocks]
 

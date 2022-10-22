@@ -24,8 +24,8 @@ COLS = 60
 ROWS = 40
 DATA_PATH = os.path.dirname(os.path.abspath(__file__)) + "/data/messages.txt"
 WHITE = Color(255, 255, 255)
-DEFAULT_ARTIFACTS = 40
-
+DEFAULT_ARTIFACTS = 16
+CAR = "[]----[]\n  OO\n  OO\n[]----[]"
 
 
 def main():
@@ -43,11 +43,11 @@ def main():
     
     # create the player
     x = int(MAX_X / 2)
-    y = int(MAX_Y / 1.02)
+    y = int(MAX_Y / 1.16)
     position = Point(x, y)
 
     player = Actor()
-    player.set_text("#")
+    player.set_text(CAR)
     player.set_font_size(FONT_SIZE)
     player.set_color(WHITE)
     player.set_position(position)
@@ -55,11 +55,11 @@ def main():
     
     # create the initial artifacts
     with open(DATA_PATH) as file:
-        data = file.read()
+        data = file.read() 
         messages = data.splitlines()
 
-    gems = "*"
-    rocks = "o"
+    gems = CAR
+    rocks = "o\no\no\no"
 
     list_artifacts = [gems, rocks]
 
@@ -68,8 +68,11 @@ def main():
         text = list_artifacts[random.randint(0, 1)]
         message = messages[n]
 
-        x = random.randint(1, COLS - 1)
-        y = random.randint(1, ROWS - 1)
+        reduced_cols = (COLS - 1) / 8
+        reduced_rows = (ROWS - 1) / 8
+
+        x = random.randint(1, int(reduced_cols))*8
+        y = random.randint(1, int(reduced_rows))*8
         position = Point(x, y)
         position = position.scale(CELL_SIZE)
 

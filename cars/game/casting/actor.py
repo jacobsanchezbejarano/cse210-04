@@ -23,6 +23,7 @@ class Actor:
         self._color = Color(255, 255, 255)
         self._position = Point(0, 0)
         self._velocity = Point(0, 0)
+        self._body_range = [Point(0, 0),Point(0, 0),Point(0, 0),Point(0, 0)]
 
     def get_color(self):
         """Gets the actor's color as a tuple of three ints (r, g, b).
@@ -47,6 +48,13 @@ class Actor:
             Point: The actor's position in 2d space.
         """
         return self._position
+    def get_body_range(self):
+        """Gets the actor's position in 2d space.
+        
+        Returns:
+            Point: The actor's position in 2d space.
+        """
+        return self._body_range
     
     def get_text(self):
         """Gets the actor's textual representation.
@@ -75,6 +83,9 @@ class Actor:
         x = (self._position.get_x() + self._velocity.get_x()) % max_x
         y = (self._position.get_y() + self._velocity.get_y()) % max_y
         self._position = Point(x, y)
+        position = self._position
+        self._body_range = [position, Point(x + 8,y),Point(x+8,y-4),Point(x,y-4)]
+        
 
     def set_color(self, color):
         """Updates the color to the given one.
@@ -91,6 +102,12 @@ class Actor:
             position (Point): The given position.
         """
         self._position = position
+        x = position.get_x()
+        y = position.get_y()
+
+        self._body_range = [position, Point(x + 8,y),Point(x+8,y-4),Point(x,y-4)]
+    
+
     
     def set_font_size(self, font_size):
         """Updates the font size to the given one.
@@ -119,5 +136,7 @@ class Actor:
     def countdown(self):
        
         x = self._position.get_x()
-        y = self._position.get_y()+1
+        y = self._position.get_y()+4
         self._position = Point(x, y)
+        position = self._position
+        self._body_range = [position, Point(x + 8,y),Point(x+8,y-4),Point(x,y-4)]
